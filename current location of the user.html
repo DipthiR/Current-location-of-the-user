@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        p {
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Current Location</h1>
+    <button onclick="getLocation()">Get Location</button>
+    <p id="locationInfo"></p>
+
+    <script>
+        // Listen for Cordova's device ready, and also fallback for browser use
+        document.addEventListener("deviceready", onDeviceReady, false);
+        document.addEventListener("DOMContentLoaded", onDeviceReady, false);
+
+        function onDeviceReady() {
+            console.log("Device is ready for geolocation.");
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    onSuccess,
+                    onError,
+                    { enableHighAccuracy: true }
+                );
+            } else {
+                document.getElementById("locationInfo").innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function onSuccess(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var accuracy = position.coords.accuracy;
+
+            var locationInfo = `
+                Latitude: ${latitude} <br>
+                Longitude: ${longitude} <br>
+                Accuracy: ${accuracy} meters
+            `;
+
+            document.getElementById("locationInfo").innerHTML = locationInfo;
+        }
+
+        function onError(error) {
+            alert(`Error getting location: ${error.message}`);
+        }
+    </script>
+</body>
+</html>
